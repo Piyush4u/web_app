@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Left Sidebar Navigation</title>
+  <style>
+    /* Reset default padding/margin */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    /* Sidebar styling */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 100vh;
+      background-color: #4A525A;
+      color: #ecf0f1;
+      overflow-y: auto;
+      padding-top: 20px;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin: 10px 0;
+    }
+
+    .sidebar ul li a {
+      display: block;
+      padding: 12px 20px;
+      color: inherit;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .sidebar ul li a:hover {
+      background-color: #34495e;
+    }
+
+    /* Main content shifts right to avoid sidebar overlap */
+    .main-content {
+      margin-left: 240px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="sidebar">
+    <h2>My App</h2>
+    <ul>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#orders">Orders</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#customers">Customers</a></li>
+      <li><a href="#reports">Reports</a></li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#help">Help</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-content">
+    <h1>Welcome to the Material Reconciliation Application</h1>
+    <p>
+      Select an option from the menu on the left to navigate.
+    </p>
+    <!-- Your page content goes here -->
+  </div>
+
+</body>
+</html>
