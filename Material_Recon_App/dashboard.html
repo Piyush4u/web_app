@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – Material Reconciliation</title>
+  <!-- Google Font -->
+  <link ="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables for Theme */
+    :root {
+      --color-bg: #f4f7fb;
+      --color-primary: #2f3b52;
+      --color-secondary: #406589;
+      --color-accent: #59c1bd;
+      --color-text: #324a5f;
+      --color-light: #ffffff;
+      --radius: 0.5rem;
+      --transition: 0.3s ease;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background-color: var(--color-light);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .toggle-nav {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--color-primary);
+      margin-right: 1rem;
+    }
+    .logo {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    /* Layout Wrapper */
+    .wrapper {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Sidebar Navigation */
+    nav {
+      background-color: var(--color-light);
+      width: 280px;
+      padding: 2rem 1.5rem;
+      box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    nav h2 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+    }
+    nav a {
+      display: block;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      color: var(--color-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: background var(--transition), color var(--transition);
+    }
+    nav a:hover,
+    nav a.active {
+      background-color: var(--color-accent);
+      color: var(--color-light);
+    }
+
+    /* Main Content Area */
+    main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    .card {
+      background-color: var(--color-light);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+    .card h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--color-primary);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .stat {
+      background-color: var(--color-light);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .stat h2 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+    }
+    .stat p {
+      font-size: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      nav {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        height: 100%;
+        transition: left var(--transition);
+        z-index: 20;
+      }
+      nav.open {
+        left: 0;
+      }
+      .toggle-nav {
+        display: block;
+      }
+      .wrapper {
+        position: relative;
+      }
+      main {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="toggle-nav" onclick="toggleNav()">&#9776;</div>
+    <div class="logo">Material Reconciliation</div>
+  </header>
+
+  <div class="wrapper">
+    <nav>
+      <h2>Menu</h2>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="contractor.html">Contractor Master</a>
+      <a href="item.html">Item Master</a>
+      <a href="purchase.html">Purchase Register</a>
+      <a href="reconciliation.html">Reconciliation</a>
+      <a href="inbox.html">Work Inbox</a>
+      <a href="#" onclick="openLogoutModal()">Logout</a>
+    </nav>
+
+    <main onclick="closeNavOnClickOutside(event)">
+      <!-- Dashboard Header -->
+      <div class="card">
+        <h1>Dashboard Overview</h1>
+        <p>Quick metrics and system status at a glance.</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats">
+        <div class="stat">
+          <h2>Contractors</h2>
+          <p>125</p>
+        </div>
+        <div class="stat">
+          <h2>Items</h2>
+          <p>342</p>
+        </div>
+        <div class="stat">
+          <h2>Purchases</h2>
+          <p>89</p>
+        </div>
+        <div class="stat">
+          <h2>Pending Reco.</h2>
+          <p>14</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const navLinks = document.querySelectorAll('nav a');
+    const current = window.location.pathname.split('/').pop();
+    navLinks.forEach(link => {
+      if(link.getAttribute('href') === current) link.classList.add('active');
+    });
+
+    const nav = document.querySelector('nav');
+    const toggle = document.querySelector('.toggle-nav');
+    function toggleNav() { nav.classList.toggle('open'); }
+    function closeNavOnClickOutside(e) {
+      if(nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    }
+    document.addEventListener('click', closeNavOnClickOutside);
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Item Master – Material Reconciliation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #f4f7fb;
+      --color-primary: #2f3b52;
+      --color-secondary: #406589;
+      --color-accent: #59c1bd;
+      --color-text: #324a5f;
+      --color-light: #ffffff;
+      --radius: 0.5rem;
+      --transition: 0.3s ease;
+      --action-color: #0d70ea;
+      --action-hover: #0dccea;
+      --delete-color: #d35400;
+      --delete-hover: #e67e22;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+    header {
+      background-color: var(--color-light);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .toggle-nav { display: none; font-size: 1.5rem; cursor: pointer; color: var(--color-primary); margin-right: 1rem; }
+    .logo { font-size: 1.75rem; font-weight: 600; color: var(--color-primary); }
+    .wrapper { flex: 1; display: flex; overflow: hidden; }
+    nav {
+      background-color: var(--color-light);
+      width: 280px;
+      padding: 2rem 1.5rem;
+      box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    nav a {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      color: var(--color-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: background var(--transition), color var(--transition);
+    }
+    nav a:hover, nav a.active { background-color: var(--color-accent); color: var(--color-light); }
+    main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    .card {
+      background-color: var(--color-light);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .button-70 {
+      background-image: linear-gradient(#0dccea, #0d70ea);
+      border: 0;
+      border-radius: var(--radius);
+      box-shadow: rgba(0, 0, 0, .3) 0 5px 15px;
+      color: #fff;
+      cursor: pointer;
+      font-family: Montserrat, sans-serif;
+      font-size: .9em;
+      padding: 10px 15px;
+      transition: opacity .2s;
+    }
+    .button-70.secondary { background-image: linear-gradient(#f39c12, #d35400); }
+    .button-70:hover { opacity: 0.9; }
+    .table-container {
+      background-color: var(--color-light);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #eaeaea;
+    }
+    th { background-color: var(--color-bg); font-weight: 600; }
+    .action-btn { background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; }
+    .action-btn.edit svg { fill: var(--action-color); }
+    .action-btn.delete svg { fill: var(--delete-color); }
+    @media (max-width: 992px) {
+      nav { position: fixed; left: -280px; top: 0; height: 100%; transition: left var(--transition); z-index: 20; }
+      nav.open { left: 0; }
+      .toggle-nav { display: block; }
+      .wrapper { position: relative; }
+      main { padding: 1rem; }
+    }
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      padding: 2rem;
+    }
+    .modal-content {
+      background: var(--color-light);
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 700px;
+      max-height: 95vh;
+      overflow-y: auto;
+    }
+    .modal-content h2 { color: var(--color-primary); margin-bottom: 1rem; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .form-grid input, .form-grid select {
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="toggle-nav" onclick="toggleNav()">&#9776;</div>
+    <div class="logo">Material Reconciliation</div>
+  </header>
+  <div class="wrapper">
+    <nav>
+      <h2>Menu</h2>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="contractor.html">Contractor Master</a>
+      <a href="item.html" class="active">Item Master</a>
+      <a href="purchase.html">Purchase Register</a>
+      <a href="reconciliation.html">Reconciliation</a>
+      <a href="inbox.html">Work Inbox</a>
+      <a href="#" onclick="openLogoutModal()">Logout</a>
+    </nav>
+    <main>
+      <div class="card">
+        <h1>Item Master</h1>
+        <p>Manage your item master list below.</p>
+      </div>
+      <div class="toolbar">
+        <button class="button-70 secondary" id="openBulkUpload">Bulk Upload</button>
+        <button class="button-70" id="openItemModal">Add New Item</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Item Code</th>
+              <th>Description</th>
+              <th>Unit</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ITEM001</td>
+              <td>8mm TMT Bar</td>
+              <td>Kg</td>
+              <td>Steel</td>
+              <td>Active</td>
+              <td>
+                <button class="action-btn edit" title="Edit">✏️</button>
+                <button class="action-btn delete" title="Delete">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add New Item Modal -->
+  <div class="modal" id="itemModal">
+    <div class="modal-content">
+      <h2>Add New Item</h2>
+      <form id="itemForm">
+        <div class="form-grid">
+          <input type="text" placeholder="Item Code" required />
+          <input type="text" placeholder="Description" required />
+          <input type="text" placeholder="Unit" required />
+          <input type="text" placeholder="Category" required />
+          <select>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="button-70 secondary" onclick="closeItemModal()">Cancel</button>
+          <button type="submit" class="button-70">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bulk Upload Modal -->
+  <div class="modal" id="bulkUploadModal">
+    <div class="modal-content">
+      <h2>Bulk Upload Items</h2>
+      <form id="bulkUploadForm">
+        <div class="form-grid">
+          <input type="file" accept=".xlsx,.xls,.csv" required />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="button-70 secondary" onclick="closeBulkUploadModal()">Cancel</button>
+          <button type="submit" class="button-70">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const navLinks = document.querySelectorAll('nav a');
+    const current = window.location.pathname.split('/').pop();
+    navLinks.forEach(link => { if(link.getAttribute('href') === current) link.classList.add('active'); });
+
+    const nav = document.querySelector('nav');
+    const toggle = document.querySelector('.toggle-nav');
+    function toggleNav() {
+      nav.classList.toggle('open');
+    }
+
+    document.addEventListener('click', function(e) {
+      if (nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    const itemModal = document.getElementById("itemModal");
+    const itemBtn = document.getElementById("openItemModal");
+    const bulkModal = document.getElementById("bulkUploadModal");
+    const bulkBtn = document.getElementById("openBulkUpload");
+
+    itemBtn.onclick = () => itemModal.style.display = "flex";
+    bulkBtn.onclick = () => bulkModal.style.display = "flex";
+    function closeItemModal() { itemModal.style.display = "none"; }
+    function closeBulkUploadModal() { bulkModal.style.display = "none"; }
+    document.getElementById("itemForm").onsubmit = function(e) {
+      e.preventDefault();
+      alert("Item saved (stub)");
+      closeItemModal();
+    };
+    document.getElementById("bulkUploadForm").onsubmit = function(e) {
+      e.preventDefault();
+      alert("Bulk upload processed (stub)");
+      closeBulkUploadModal();
+    };
+  </script>
+<!-- logout.html or embedded in any page with logout button -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const logoutBtn = document.querySelector("a[href='logout.html'], .logout-button");
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        // Optional: Clear any auth/session flag if stored in localStorage
+        localStorage.removeItem("isLoggedIn");
+
+        // Redirect to login
+        window.location.href = "login.html";
+      });
+    }
+  });
+</script>
+<div id="logoutModal" class="modal">
+  <div class="modal-content">
+    <h2>Confirm Logout</h2>
+    <p>Are you sure you want to log out?</p>
+    <div class="modal-actions">
+      <button class="button-70 logout-yes" onclick="confirmLogout()">Yes</button>
+      <button class="button-70 logout-no" onclick="closeLogoutModal()">No</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Styles -->
+<style>
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  .modal-content {
+    background: var(--color-light);
+    padding: 2rem;
+    border-radius: var(--radius);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+  .modal-content h2 {
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+  }
+  .modal-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .logout-yes {
+    background-image: linear-gradient(#28a745, #218838); /* Green gradient */
+    color: white;
+  }
+  .logout-no {
+    background-image: linear-gradient(#dc3545, #c82333); /* Red gradient */
+    color: white;
+  }
+</style>
+
+<!-- Modal Script -->
+<script>
+  function openLogoutModal() {
+    document.getElementById('logoutModal').style.display = 'flex';
+  }
+
+  function closeLogoutModal() {
+    document.getElementById('logoutModal').style.display = 'none';
+  }
+
+  function confirmLogout() {
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
+</script>
+
+</body>
+</html>
+
