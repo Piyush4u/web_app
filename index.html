@@ -1,55 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Material Reconciliation Application</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piyush Pandey | Portfolio</title>
+  <meta name="description" content="Portfolio of Piyush Pandey - Data Analyst, SAP Automator, BI Developer" />
+  <meta name="author" content="Piyush Pandey">
+  <meta name="keywords" content="Piyush Pandey, Data Analyst, SAP Automation, Power BI, Python Developer, Portfolio">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
   <style>
-    .center button {
-      width: 60%;
-      padding: 15px;
-      margin: 5px;
-      border: none;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://img.freepik.com/free-vector/abstract-orange-wave-background-design_1017-33900.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #f1f1f1;
+      line-height: 1.6;
+      padding: 0 20px;
+    }
+    .glass {
+      background: rgba(15, 15, 15, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      /* border: 1px solid rgba(255, 255, 255, 0.1); */
+      border-radius: 12px;
+      padding: 10px;
+      margin: 20px auto;
+      /* max-width: 900px;  */
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    header {
+      text-align: left;
+      padding: 60px 0 30px;
+    }
+    header h1 {
+      font-size: 3rem;
+      color: #FF5C00;
+    }
+    header p {
+      font-size: 1.2rem;
+      color: #ddd;
+    }
+    h2 {
+      color: #F8A145;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #333;
+      padding-bottom: 8px;
+      font-size: 1.5rem;
+    }
+    .skills ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+    .skills li {
+      background: rgba(30,30,30,0.8);
+      padding: 10px;
+      border-left: 4px solid #00e676;
       border-radius: 4px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-family: inherit;
     }
-
-    .center button.admin {
-      background-color: #5469d4;
-      color: black;
+    .project {
+      background: rgba(28,28,28,0.8);
+      padding: 15px;
+      margin-bottom: 15px;
+      border-left: 4px solid #00bcd4;
+      border-radius: 4px;
     }
-
-    .center button.member {
-      background-color: #ea085d;
-      color: black;
+    .contact a {
+      display: block;
+      margin: 8px 0;
+      color: #4fc3f7;
     }
-
-    .center button.contractor {
-      background-color: #53D183;
-      color: black;
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      font-size: 0.9em;
+      color: #ccc;
     }
-
-    .center button:hover {
-      opacity: 0.9;
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      h2 {
+        font-size: 1.3rem;
+      }
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="top"></div>
-    <div class="bottom"></div>
-    <div class="center">
-      <h2>Please Select Role</h2>
-      <button class="admin" onclick="location.href='admin_index.html'">Admin</button>
-      <button class="member" onclick="location.href='member_index.html'">Member</button>
-      <button class="contractor" onclick="location.href='contractor_index.html'">Contractor</button>
-      <h2>&nbsp;</h2>
+<body> 
+  <header>
+    <h1>Hello. <br>I'm Piyush Pandey</h1>
+    <p>Data Analyst | SAP Automator | BI Developer</p>
+  </header>
+
+  <section class="about glass">
+    <h2>About Me</h2>
+    <p>I work in a steel manufacturing company where I design Power BI dashboards, maintain a MySQL-based data warehouse, and build advanced Python automation tools for SAP transactions such as MIGO, MIRO, and DMS operations.</p>
+  </section>
+
+  <section class="skills glass">
+    <h2>Skills</h2>
+    <ul>
+      <li>Power BI Development</li>
+      <li>Python SAP GUI Automation</li>
+      <li>MySQL Data Warehousing</li>
+      <li>Flask Web Apps</li>
+      <li>OCR + Invoice Verification</li>
+      <li>ABAP Debugging</li>
+    </ul>
+  </section>
+
+  <section class="projects glass">
+    <h2>Projects</h2>
+    <div class="project">
+      <h3>MIRO Invoice Automation</h3>
+      <p>Automated tool built in Python to verify scanned invoice PDFs using OCR and NLP, and post in SAP MIRO post-validation.</p>
     </div>
-  </div>
+    <div class="project">
+      <h3>MIGO Entry Tool</h3>
+      <p>GUI-based SAP script tool that reads Excel files to post MIGO entries efficiently and accurately.</p>
+    </div>
+    <div class="project">
+      <h3>Procurement Dashboard</h3>
+      <p>Interactive Power BI report displaying vendor performance, PO lifecycle, and audit compliance metrics from SAP data.</p>
+    </div>
+  </section>
+
+  <section class="contact glass">
+    <h2>Contact</h2>
+    <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i> your.email@example.com</a>
+    <a href="https://linkedin.com/in/yourprofile" target="_blank"><i class="fab fa-linkedin"></i> linkedin.com/in/yourprofile</a>
+    <a href="https://github.com/yourusername" target="_blank"><i class="fab fa-github"></i> github.com/yourusername</a>
+  </section>
+
+  <footer class="glass">
+    <p>&copy; 2025 Piyush Pandey. All rights reserved.</p>
+  </footer>
 </body>
 </html>
-
