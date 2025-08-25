@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FIM Dashboard</title>
+
+  <!-- Google font: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --sidebar-width: 18rem;
+      --bg: #f5f5f5;
+      --nav-bg: #111111;
+      --accent: #0ea5a4;
+      --muted: #6b7280;
+      --radius: 10px;
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+
+    *{box-sizing: border-box}
+    html,body{height:100%; margin:0}
+    body{
+      background: var(--bg);
+      color:#111827;
+      font-size:16px;
+      line-height:1.4;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding-left: calc(var(--sidebar-width) + 2rem);
+      transition: padding-left .2s ease;
+    }
+
+    nav.sidebar{
+      position:fixed;
+      left:1rem;
+      top:1rem;
+      width:var(--sidebar-width);
+      height:calc(100% - 2rem);
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius: var(--radius);
+      box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+      padding:1.25rem;
+      color: #fff;
+      background-color: var(--nav-bg);
+      display:flex;
+      flex-direction:column;
+      gap:0.75rem;
+      overflow:auto;
+    }
+
+    nav h2{
+      margin:0 0 .25rem 0;
+      font-size:1.25rem;
+      font-weight:600;
+      letter-spacing:0.2px;
+    }
+
+    .nav-list{list-style:none; margin:0; padding:0}
+    .nav-list > li{margin:0.25rem 0}
+    .nav-list a, .nav-list button{
+      display:block;
+      text-decoration:none;
+      color:inherit;
+      padding:.45rem .6rem;
+      border-radius:8px;
+      font-weight:500;
+      transition:background .12s ease, transform .06s ease;
+      background:transparent;
+      border:0;
+      width:100%;
+      text-align:left;
+      cursor:pointer;
+      font-size:0.98rem;
+    }
+    .nav-list a:hover, .nav-list button:hover{background: rgba(255,255,255,0.04); transform: translateY(-1px)}
+    .nav-list a:focus, .nav-list button:focus{outline:2px solid rgba(14,165,164,.18)}
+
+    .submenu{list-style:none; margin:0.35rem 0 0 0; padding-left:0.5rem; color:var(--muted); max-height:0; overflow:hidden; transition:max-height .28s cubic-bezier(.2,.9,.2,1);}
+    .submenu.show{max-height:400px;}
+    .submenu li{padding:.18rem 0}
+
+    main{
+      padding:2rem;
+      min-height:100vh;
+    }
+
+    @media (max-width:900px){
+      body{padding-left:1rem}
+      nav.sidebar{
+        position:static;
+        width:100%;
+        height:auto;
+        border-radius:10px;
+        margin:1rem 1rem 0 1rem;
+      }
+    }
+
+
+    .muted{color:var(--muted); font-size:.95rem}
+    .logo{
+      display:flex; align-items:center; gap:.6rem
+    }
+    .logo-badge{width:34px; height:34px; border-radius:8px; background:var(--accent); display:inline-block}
+
+    /* small chevron */
+    .chev{float:right; opacity:.8; transform:rotate(0); transition:transform .18s ease}
+    button[aria-expanded="true"] .chev{transform:rotate(90deg)}
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar / primary navigation -->
+  <nav class="sidebar" role="navigation" aria-label="Main sidebar">
+    <div class="logo">
+      <span class="logo-badge" aria-hidden="true"></span>
+      <h2>FIM Dashboard</h2>
+    </div>
+
+    <ul class="nav-list" role="menu">
+      <li role="none"><a role="menuitem" href="#overview">Overview</a></li>
+
+      <li role="none">
+        <!-- Toggler is a button for accessibility -->
+        <button id="mm-toggle" aria-controls="mm-submenu" aria-expanded="false" aria-haspopup="true">
+          Material Management
+          <span class="chev" aria-hidden="true">▶</span>
+        </button>
+
+        <ul id="mm-submenu" class="submenu" aria-label="Material Management submenu">
+          <li><a href="#master-data" class="muted">Master Data Management</a></li>
+          <li><a href="#material-issue" class="muted">Material Issue</a></li>
+          <li><a href="#material-consumption" class="muted">Material Consumption</a></li>
+          <li><a href="#material-transfer" class="muted">Material Transfer</a></li>
+          <li><a href="#material-return" class="muted">Material Return</a></li>
+          <li><a href="#work-inbox" class="muted">Work Inbox</a></li>
+        </ul>
+      </li>
+
+      <!-- Example additional sections (expandable) -->
+      <li role="none"><a role="menuitem" href="#reports">Reports</a></li>
+      <li role="none"><a role="menuitem" href="#logout">Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main content area (placeholder) -->
+  <main>
+    <h1>Welcome to FIM Dashboard</h1>
+    <p class="muted">Use the sidebar to navigate the dashboard modules. This is a lightweight, responsive starting template you can integrate into your app.</p>
+
+    <section id="material-management">
+      <h2>Material Management</h2>
+      <p class="muted">Placeholder content for the Material Management module. Click the "Material Management" item in the sidebar to expand/collapse the submenu.</p>
+    </section>
+  </main>
+
+  <script>
+    // Accessible collapse toggle for Material Management submenu
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleBtn = document.getElementById('mm-toggle');
+      const submenu = document.getElementById('mm-submenu');
+
+      if (!toggleBtn || !submenu) return;
+
+      toggleBtn.addEventListener('click', function () {
+        const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+        toggleBtn.setAttribute('aria-expanded', String(!expanded));
+        submenu.classList.toggle('show');
+      });
+
+      // Keyboard support (Enter / Space)
+      toggleBtn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleBtn.click();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
